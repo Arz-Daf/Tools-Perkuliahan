@@ -1,0 +1,111 @@
+import React from 'react';
+import { Image, View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+
+export default function App() {
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.profileSection}>
+        <Text style={styles.title}>Tools Perkuliahan</Text>
+        <Image source={{ uri: 'https://media.licdn.com/dms/image/v2/D4D03AQGGTZkFr1HSlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1674275024962' }} style={styles.profileImg} />
+      </View>
+
+      <View style={styles.dropdowns}>
+        <Picker style={styles.select}>
+          <Picker.Item label="Fakultas" value="" />
+        </Picker>
+        <Picker style={styles.select}>
+          <Picker.Item label="Program Studi" value="" />
+        </Picker>
+        <Picker style={styles.select}>
+          <Picker.Item label="Aplikasi Berbasis..." value="" />
+        </Picker>
+      </View>
+
+      <View style={styles.searchBar}>
+        <TextInput placeholder="Cari Aplikasi" style={styles.input} />
+      </View>
+
+      <View style={styles.appList}>
+      {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/d/dc/XAMPP_Logo.png', 'XAMPP')}
+        {renderAppItem('https://seeklogo.com/images/A/autocad-logo-69326D7728-seeklogo.com.png', 'AutoCAD')}
+        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/9/98/Apache_NetBeans_Logo.svg', 'NetBeans')}
+        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png', 'MATLAB')}
+        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg', 'Figma')}
+        {renderAppItem('https://img.utdstc.com/icon/4c9/33c/4c933cb96d4d64170e0c5e0e07e8e6fbc0ad8c2602728b6454f09ac1340e5f64:200', 'Bizagi Modeler')}
+        {renderAppItem('https://img.utdstc.com/icon/835/78c/83578c6c83fe390b95578d4464c553ee23d337fb1bc319a68891fcb6819d56b6:200', 'CamScanner')}
+        {renderAppItem('https://seeklogo.com/images/W/wps-office-logo-3EE69865A7-seeklogo.com.png', 'WPS Office')}
+      </View>
+    </ScrollView>
+  );
+}
+
+const renderAppItem = (icon, name) => (
+  <View style={styles.appItem}>
+    <Image source={{ uri: icon }} style={styles.appIcon} />
+    <Text>{name}</Text>
+  </View>
+);
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 20,
+    width: '100%',
+    textAlign: 'center',
+    marginTop: 50,
+    fontFamily: 'Arial',
+  },
+  profileSection: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  profileImg: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    objectFit: 'cover',
+  },
+  dropdowns: {
+    marginTop: 20,
+  },
+  select: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  searchBar: {
+    margin: 10,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+  },
+  appList: {
+    marginTop: 20,
+  },
+  appItem: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
+    padding: 10,
+    borderColor: '#eee',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  appIcon: {
+    width: 30,
+    height: 30,
+    marginRight: 10,
+  },
+});
