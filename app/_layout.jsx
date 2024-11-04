@@ -6,7 +6,7 @@ export default function RootLayout() {
     return (
         <Stack>
             <Stack.Screen name='index' />
-            <Stack.Screen name='aplikasi' />
+            <Stack.Screen name='[id]' />
             <Stack.Screen name='popup' options={{presentation:'modal'}} />
         </Stack>
     )

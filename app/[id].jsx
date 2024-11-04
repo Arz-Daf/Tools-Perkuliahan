@@ -1,13 +1,16 @@
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { toolsData } from '../libs/data';
 
 export default function App() {
+  const { id } = useLocalSearchParams()
+  const tool = toolsData.find((item) => item.id === id); // Mencari data yang sesuai dengan ID
   return (
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <View style={styles.arrow}>
             <View style={styles.arrowLine1} />
             <View style={styles.arrowLine2} />
@@ -15,32 +18,31 @@ export default function App() {
         </TouchableOpacity>
         <Text style={styles.headerText}>Tools Perkuliahan</Text>
         <Image
-          source={{ uri: 'https://media.licdn.com/dms/image/v2/D4D03AQGGTZkFr1HSlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1674275024962?e=1733961600&v=beta&t=4XJSNrZtr_aaugs5jw5Wykkl4iFLzShNFEUZ1vqTPTs' }}
+          source={{
+            uri: 'https://media.licdn.com/dms/image/v2/D4D03AQGGTZkFr1HSlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1674275024962?e=1733961600&v=beta&t=4XJSNrZtr_aaugs5jw5Wykkl4iFLzShNFEUZ1vqTPTs',
+          }}
           style={styles.profileImage}
         />
       </View>
 
-      {/* XAMPP Title */}
-      <Text style={styles.title}>XAMPP</Text>
+      {/* Title */}
+      <Text style={styles.title}>{tool.title}</Text>
 
-      {/* XAMPP Image */}
-      <Image
-        source={{ uri: '=https://upload.wikimedia.org/wikipedia/commons/d/dc/XAMPP_Logo.png' }}
-        style={styles.xamppImage}
-      />
+      {/* Image */}
+      <Image source={{ uri: tool.imageUri }} style={styles.toolImage} />
 
       {/* Description */}
-      <Text style={styles.description}>
-        XAMPP adalah paket perangkat lunak yang menyediakan lingkungan server
-        lokal untuk mengembangkan dan menguji aplikasi web secara offline.
-      </Text>
+      <Text style={styles.description}>{tool.description}</Text>
 
       {/* Guide and Download */}
       <View style={styles.footer}>
         <Text style={styles.guideText}>Panduan{'\n'}Pemakaian</Text>
-        <TouchableOpacity style={styles.downloadButton} onPress={()=>{
-            router.push('/popup')
-        }}>
+        <TouchableOpacity
+          style={styles.downloadButton}
+          onPress={() => {
+            router.push('/popup');
+          }}
+        >
           <Text style={styles.downloadButtonText}>Unduh</Text>
         </TouchableOpacity>
       </View>
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'Outfit',
   },
-  xamppImage: {
+  toolImage: {
     marginTop: 20,
     width: 208,
     height: 211,
