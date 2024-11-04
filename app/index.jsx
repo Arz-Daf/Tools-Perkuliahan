@@ -1,116 +1,162 @@
 import { Picker } from '@react-native-picker/picker';
-import { Link } from 'expo-router';
-import React from 'react';
-import { Image, View, Text, StyleSheet, TextInput, ScrollView } from 'react-native';
-// import { Picker } from '@react-native-picker/picker';
+import React, { useState } from 'react';
+import { View, Text, Image, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function App() {
+  const allApps = [
+    { name: 'XAMPP', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://seeklogo.com/images/X/xampp-logo-1C1A9E3689-seeklogo.com.png' },
+    { name: 'Netbeans', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://i0.wp.com/gluonhq.com/wp-content/uploads/2015/09/netbeans-logo-21.png?fit=224%2C224&ssl=1' },
+    { name: 'Figma', programStudi: 'Sistem Informasi', mataKuliah: 'Perancangan User Experience', image: 'https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-1024.png' },
+    { name: 'CamScanner', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/eWYNxjXiub6-HqtwoS2d4bl-NkqcKgOHansSnXXqje8-K9XLRwflOgEYwSzPMicdAA=w480-h960-rw' },
+    { name: 'WPS Office', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/DUohbTj-FKR_48Dav1c-1QZTSo6D0CzVNSO28RYhC2AH8_3B93AO3lTF3S2PKPQHeQY=s96-rw' }
+  ];
+
+  const [programStudi, setProgramStudi] = useState('');
+  const [mataKuliah, setMataKuliah] = useState('');
+  const [filteredApps, setFilteredApps] = useState(allApps);
+
+  const handleFilterApps = (ps, mk) => {
+    if (ps || mk) {
+      const filtered = allApps.filter(app => 
+        (ps ? app.programStudi === ps : true) && (mk ? app.mataKuliah === mk : true)
+      );
+      setFilteredApps(filtered);
+    } else {
+      setFilteredApps(allApps); // Kembalikan ke daftar semua aplikasi
+    }
+  };
+
+  const handleProgramStudiChange = (value) => {
+    setProgramStudi(value);
+    handleFilterApps(value, mataKuliah);
+  };
+
+  const handleMataKuliahChange = (value) => {
+    setMataKuliah(value);
+    handleFilterApps(programStudi, value);
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.profileSection}>
-        <Text style={styles.title}>Tools Perkuliahan</Text>
-        <Image source={{ uri: 'https://media.licdn.com/dms/image/v2/D4D03AQGGTZkFr1HSlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1674275024962' }} style={styles.profileImg} />
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>
+          <Text style={styles.tools}>Tools</Text> <Text style={styles.perkuliahan}>Perkuliahan</Text>
+        </Text>
+        <Image source={{ uri: 'https://media.licdn.com/dms/image/v2/D5603AQH0qgtYSlO8Qw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718282402772?e=1735171200&v=beta&t=1YiTVqQZYtfLQzt54V0qAlObcsXZapW5rAULBjN6UqE' }} style={styles.profileImage} />
       </View>
 
-      <View style={styles.dropdowns}>
-        <Picker style={styles.select}>
-          <Picker.Item label="Fakultas" value="" />
-        </Picker>
-        <Picker style={styles.select}>
+      <View style={styles.dropdownContainer}>
+        <Picker
+          selectedValue={programStudi}
+          style={styles.picker}
+          onValueChange={(itemValue) => handleProgramStudiChange(itemValue)}
+        >
           <Picker.Item label="Program Studi" value="" />
+          <Picker.Item label="Sistem Komputer" value="Sistem Komputer" />
+          <Picker.Item label="Teknik Informatika" value="Teknik Informatika" />
+          <Picker.Item label="Sistem Informasi" value="Sistem Informasi" />
         </Picker>
-        <Picker style={styles.select}>
-          <Picker.Item label="Aplikasi Berbasis..." value="" />
-        </Picker>
-      </View>
 
-      <View style={styles.searchBar}>
-        <TextInput placeholder="Cari Aplikasi" style={styles.input} />
+        <Picker
+          selectedValue={mataKuliah}
+          style={styles.picker}
+          onValueChange={(itemValue) => handleMataKuliahChange(itemValue)}
+        >
+          <Picker.Item label="Mata Kuliah" value="" />
+          <Picker.Item label="Pemrograman Web" value="Pemrograman Web" />
+          <Picker.Item label="Perancangan User Experience" value="Perancangan User Experience" />
+          <Picker.Item label="Literasi Digital" value="Literasi Digital" />
+        </Picker>
+
+        <TextInput
+          placeholder="Cari Aplikasi"
+          style={styles.searchBox}
+        />
       </View>
 
       <View style={styles.appList}>
-      
-      <Link href="/aplikasi">
-      {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/d/dc/XAMPP_Logo.png', 'XAMPP')}
-      </Link>
-        {renderAppItem('https://seeklogo.com/images/A/autocad-logo-69326D7728-seeklogo.com.png', 'AutoCAD')}
-        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/9/98/Apache_NetBeans_Logo.svg', 'NetBeans')}
-        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png', 'MATLAB')}
-        {renderAppItem('https://upload.wikimedia.org/wikipedia/commons/3/33/Figma-logo.svg', 'Figma')}
-        {renderAppItem('https://img.utdstc.com/icon/4c9/33c/4c933cb96d4d64170e0c5e0e07e8e6fbc0ad8c2602728b6454f09ac1340e5f64:200', 'Bizagi Modeler')}
-        {renderAppItem('https://img.utdstc.com/icon/835/78c/83578c6c83fe390b95578d4464c553ee23d337fb1bc319a68891fcb6819d56b6:200', 'CamScanner')}
-        {renderAppItem('https://seeklogo.com/images/W/wps-office-logo-3EE69865A7-seeklogo.com.png', 'WPS Office')}
+        {filteredApps.length > 0 ? (
+          filteredApps.map((app, index) => (
+            <TouchableOpacity key={index} style={styles.appButton}>
+              <Image source={{ uri: app.image }} style={styles.appIcon} />
+              <Text style={styles.appText}>{app.name}</Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <Text style={styles.noAppsText}>Tidak ada aplikasi yang ditemukan</Text>
+        )}
       </View>
     </ScrollView>
   );
 }
 
-const renderAppItem = (icon, name) => (
-  <View style={styles.appItem}>
-    <Image source={{ uri: icon }} style={styles.appIcon} />
-    <Text>{name}</Text>
-  </View>
-);
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 20,
-    width: '100%',
-    textAlign: 'center',
-    marginTop: 50,
-    fontFamily: 'Arial',
+    flex: 1,
+    backgroundColor: '#fff',
+    padding: 20
   },
-  profileSection: {
-    display: 'flex',
+  header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between'
   },
   title: {
-    fontSize: 18,
+    fontSize: 24,
     fontWeight: 'bold',
+    textAlign: 'center',
+    flex: 1
   },
-  profileImg: {
+  tools: {
+    color: '#fca311'
+  },
+  perkuliahan: {
+    color: '#007bff'
+  },
+  profileImage: {
     width: 50,
     height: 50,
-    borderRadius: 25,
-    objectFit: 'cover',
+    borderRadius: 25
   },
-  dropdowns: {
-    marginTop: 20,
+  dropdownContainer: {
+    marginVertical: 20
   },
-  select: {
+  picker: {
+    height: 50,
     width: '100%',
-    marginBottom: 10,
-  },
-  searchBar: {
-    margin: 10,
-  },
-  input: {
-    width: '100%',
-    padding: 10,
+    borderColor: '#ddd',
     borderWidth: 1,
-    borderColor: '#ccc',
     borderRadius: 5,
+    marginBottom: 10
+  },
+  searchBox: {
+    height: 40,
+    borderColor: '#ddd',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10
   },
   appList: {
-    marginTop: 20,
+    marginVertical: 20
   },
-  appItem: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    margin: 10,
-    padding: 10,
-    borderColor: '#eee',
-    borderWidth: 1,
+  appButton: {
+    backgroundColor: '#f0f0f0',
+    padding: 15,
+    marginBottom: 10,
     borderRadius: 5,
+    flexDirection: 'row',
+    alignItems: 'center'
   },
   appIcon: {
-    width: 30,
-    height: 30,
-    marginRight: 10,
+    width: 40,
+    height: 40,
+    marginRight: 10
   },
+  appText: {
+    fontSize: 16
+  },
+  noAppsText: {
+    fontSize: 16,
+    color: '#aaa'
+  }
 });
