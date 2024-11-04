@@ -1,14 +1,16 @@
+
 import { Picker } from '@react-native-picker/picker';
+import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, Image, TextInput, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function App() {
   const allApps = [
-    { name: 'XAMPP', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://seeklogo.com/images/X/xampp-logo-1C1A9E3689-seeklogo.com.png' },
-    { name: 'Netbeans', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://i0.wp.com/gluonhq.com/wp-content/uploads/2015/09/netbeans-logo-21.png?fit=224%2C224&ssl=1' },
-    { name: 'Figma', programStudi: 'Sistem Informasi', mataKuliah: 'Perancangan User Experience', image: 'https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-1024.png' },
-    { name: 'CamScanner', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/eWYNxjXiub6-HqtwoS2d4bl-NkqcKgOHansSnXXqje8-K9XLRwflOgEYwSzPMicdAA=w480-h960-rw' },
-    { name: 'WPS Office', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/DUohbTj-FKR_48Dav1c-1QZTSo6D0CzVNSO28RYhC2AH8_3B93AO3lTF3S2PKPQHeQY=s96-rw' }
+    { id: 'xampp', name: 'XAMPP', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://seeklogo.com/images/X/xampp-logo-1C1A9E3689-seeklogo.com.png' },
+    { id: 'netbeans', name: 'Netbeans', programStudi: 'Sistem Informasi', mataKuliah: 'Pemrograman Web', image: 'https://i0.wp.com/gluonhq.com/wp-content/uploads/2015/09/netbeans-logo-21.png?fit=224%2C224&ssl=1' },
+    { id: 'figma', name: 'Figma', programStudi: 'Sistem Informasi', mataKuliah: 'Perancangan User Experience', image: 'https://cdn4.iconfinder.com/data/icons/logos-brands-in-colors/3000/figma-logo-1024.png' },
+    { id: 'camscanner', name: 'CamScanner', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/eWYNxjXiub6-HqtwoS2d4bl-NkqcKgOHansSnXXqje8-K9XLRwflOgEYwSzPMicdAA=w480-h960-rw' },
+    { id: 'wpsoffice', name: 'WPS Office', programStudi: 'Sistem Informasi', mataKuliah: 'Literasi Digital', image: 'https://play-lh.googleusercontent.com/DUohbTj-FKR_48Dav1c-1QZTSo6D0CzVNSO28RYhC2AH8_3B93AO3lTF3S2PKPQHeQY=s96-rw' }
   ];
 
   const [programStudi, setProgramStudi] = useState('');
@@ -77,7 +79,9 @@ export default function App() {
       <View style={styles.appList}>
         {filteredApps.length > 0 ? (
           filteredApps.map((app, index) => (
-            <TouchableOpacity key={index} style={styles.appButton}>
+            <TouchableOpacity key={index} style={styles.appButton} onPress={()=>{
+              router.push({pathname:'/[id]',params:{id:app.id}})
+            }}>
               <Image source={{ uri: app.image }} style={styles.appIcon} />
               <Text style={styles.appText}>{app.name}</Text>
             </TouchableOpacity>
