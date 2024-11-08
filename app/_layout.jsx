@@ -7,7 +7,7 @@ export default function RootLayout() {
         <Stack>
             <Stack.Screen name='index' />
             <Stack.Screen name='[id]' />
-            <Stack.Screen name='popup' options={{presentation:'modal'}} />
+            <Stack.Screen name='DetailScreen' />
         </Stack>
     )
 }
