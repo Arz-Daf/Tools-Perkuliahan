@@ -1,11 +1,15 @@
 import { router, useLocalSearchParams } from 'expo-router';
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { toolsData } from '../libs/data';
 
 export default function App() {
-  const { id } = useLocalSearchParams()
-  const tool = toolsData.find((item) => item.id === id); // Mencari data yang sesuai dengan ID
+  const { id } = useLocalSearchParams();
+  const tool = toolsData.find((item) => item.id === id);
+
+  // State untuk mengatur visibilitas modal
+  const [modalVisible, setModalVisible] = useState(false);
+
   return (
     <View style={styles.container}>
       {/* Header */}
@@ -19,7 +23,7 @@ export default function App() {
         <Text style={styles.headerText}>Tools Perkuliahan</Text>
         <Image
           source={{
-            uri: 'https://media.licdn.com/dms/image/v2/D4D03AQGGTZkFr1HSlQ/profile-displayphoto-shrink_800_800/profile-displayphoto-shrink_800_800/0/1674275024962?e=1733961600&v=beta&t=4XJSNrZtr_aaugs5jw5Wykkl4iFLzShNFEUZ1vqTPTs',
+            uri: 'https://media.licdn.com/dms/image/v2/D5603AQH0qgtYSlO8Qw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1718282402772?e=1735171200&v=beta&t=1YiTVqQZYtfLQzt54V0qAlObcsXZapW5rAULBjN6UqE',
           }}
           style={styles.profileImage}
         />
@@ -36,19 +40,46 @@ export default function App() {
 
       {/* Guide and Download */}
       <View style={styles.footer}>
-        <Text style={styles.guideText}>Panduan{'\n'}Pemakaian</Text>
+        <TouchableOpacity
+          onPress={() => router.push({ pathname: 'DetailScreen', params: { id: tool.id } })} // Navigasi ke DetailScreen dengan ID tool
+        >
+          <Text style={styles.guideText}>Panduan{'\n'}Pemakaian</Text>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.downloadButton}
-          onPress={() => {
-            router.push('/popup');
-          }}
+          onPress={() => setModalVisible(true)} // Tampilkan modal ketika tombol "Unduh" ditekan
         >
           <Text style={styles.downloadButtonText}>Unduh</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Modal Konfirmasi */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Konfirmasi</Text>
+            <Text style={styles.modalText}>
+              Link pengunduhan akan dikirimkan melalui e-mail anda. Terima kasih
+            </Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => setModalVisible(false)} // Tutup modal ketika tombol ditekan
+            >
+              <Text style={styles.modalButtonText}>Unduh</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
+
+// Styles tetap sama...
 
 const styles = StyleSheet.create({
   container: {
@@ -149,5 +180,46 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontFamily: 'Outfit',
     textAlign: 'center',
+  },
+  // Modal Styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: 300,
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'black',
+  },
+  modalText: {
+    fontSize: 15,
+    textAlign: 'center',
+    color: 'black',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#3470A2',
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  modalButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
