@@ -1,7 +1,8 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { toolsData } from '../libs/data';
+import { toolsData } from '../../libs/data';
+import { AntDesign, FontAwesome5 } from '@expo/vector-icons';
 
 export default function App() {
   const { id } = useLocalSearchParams();
@@ -15,10 +16,7 @@ export default function App() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <View style={styles.arrow}>
-            <View style={styles.arrowLine1} />
-            <View style={styles.arrowLine2} />
-          </View>
+          <AntDesign name='arrowleft' size={20}/>
         </TouchableOpacity>
         <Text style={styles.headerText}>Tools Perkuliahan</Text>
         <Image
