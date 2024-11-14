@@ -1,7 +1,8 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { toolsData } from '../libs/data'; // Pastikan path ini benar
+import { toolsData } from '../../libs/data'; // Pastikan path ini benar
+import { AntDesign } from '@expo/vector-icons';
 
 export default function DetailScreen() {
   const { id } = useLocalSearchParams();
@@ -20,9 +21,8 @@ export default function DetailScreen() {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <View style={styles.arrow}>
-            <View style={styles.arrowLine1} />
-            <View style={styles.arrowLine2} />
+          <View>
+            <AntDesign name='arrowleft' size={20}/>
           </View>
         </TouchableOpacity>
         <Text style={styles.headerText}>Tools Perkuliahan</Text>
