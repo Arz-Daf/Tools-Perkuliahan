@@ -1,19 +1,20 @@
-import { View, Text } from 'react-native'
-import React from 'react'
-import { useAuth } from '../../providers/AuthProviders'
-import { Redirect, Slot, Stack } from 'expo-router'
+import { View, Text, TouchableOpacity, Image } from "react-native";
+import React from "react";
+import { useAuth } from "../../providers/AuthProviders";
+import { Redirect, Slot, Stack } from "expo-router";
+import Title from "../components/Title";
+import { supabase } from "../../libs/supabase";
+import Header from "../components/Header";
 
 export default function HomeLayout() {
-    const {user} = useAuth()
-    
-    if(!user){
-      return <Redirect href="/(auth)/Login"/>
-    }
+  const { user } = useAuth();
+
+  if (!user) {
+    return <Redirect href="/(auth)/Login" />;
+  }
   return (
-    <Stack>
-      <Stack.Screen name='[id]' options={{headerShown:false}}/>
-      <Stack.Screen name='DetailScreen' options={{headerShown:false}}/>
-      <Stack.Screen name='index' options={{headerShown:false}}/>
-    </Stack>
-  )
+    <>
+      <Slot />
+    </>
+  );
 }

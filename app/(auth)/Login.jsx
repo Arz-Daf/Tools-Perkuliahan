@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons'; // Pastikan Anda sudah memasang 'expo/vector-icons'
 import { router, Stack } from 'expo-router';
 import { supabase } from '../../libs/supabase';
@@ -21,56 +21,66 @@ export default function LoginScreen() {
     setLoading(false);
   }
 
-  return (<>
+  return (
+    <>
+      <Stack.Screen options={{ headerShown: false }} />
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer}>
+          <View style={styles.container}>
+            <View style={styles.logoContainer}>
+              <Text style={styles.logoText}>
+                <Text style={styles.toolsText}>Tools </Text>
+                <Text style={styles.perkuliahanText}>Perkuliahan</Text>
+              </Text>
+            </View>
 
-  
-    <Stack.Screen options={{headerShown: false}}/>
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Text style={styles.logoText}>
-          <Text style={styles.toolsText}>Tools </Text>
-          <Text style={styles.perkuliahanText}>Perkuliahan</Text>
-        </Text>
-      </View>
+            <Text style={styles.headerText}>Login to your account</Text>
+            <Text style={styles.subHeaderText}>Welcome back! Please enter your details.</Text>
 
-      <Text style={styles.headerText}>Login to your account</Text>
-      <Text style={styles.subHeaderText}>Welcome back! Please enter your details.</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email address"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email address"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="gray" />
+              </TouchableOpacity>
+            </View>
 
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry={!showPassword}
-        />
-        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-          <Ionicons name={showPassword ? "eye-off" : "eye"} size={24} color="gray" />
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity disabled={loading} style={styles.loginButton} onPress={signInWithEmail}>
+              <Text style={styles.loginButtonText}>Login</Text>
+            </TouchableOpacity>
 
-      <TouchableOpacity disabled={loading} style={styles.loginButton} onPress={signInWithEmail}>
-        <Text style={styles.loginButtonText}>Login</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => {router.push('/Signup')}}>
-        <Text style={styles.signUpText}>Sign up</Text>
-      </TouchableOpacity>
-    </View>
+            <TouchableOpacity onPress={() => { router.push('/Signup') }}>
+              <Text style={styles.signUpText}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -79,14 +89,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   logoContainer: {
-    position: 'absolute',
-    top: 220, // Atur jarak dari atas sesuai kebutuhan
+    marginBottom: 0,
+    marginTop: 50,// Atur margin ini agar tetap jauh dari keyboard
     alignItems: 'center',
   },
   logoText: {
     fontSize: 35,
     fontWeight: 'bold',
-    marginBottom: 32,
+    marginBottom: 0,
   },
   toolsText: {
     color: '#FED542', // Warna kuning
@@ -98,7 +108,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 8,
-    marginTop: 50, // Menambahkan jarak antara logo dan teks utama
+    marginTop: 50,
   },
   subHeaderText: {
     fontSize: 16,

@@ -43,11 +43,11 @@ export default function DetailScreen() {
 
       {/* Description */}
       <ScrollView style={styles.descriptionContainer}>
-      {tool.usageGuide.map((step, index) => (
-        <Text key={index} style={styles.guideText}>
-          {index + 1}. {step}
-        </Text>
-      ))}
+        {tool.usageGuide.map((step, index) => (
+          <Text key={index} style={styles.guideText}>
+            {index + 1}. {step}
+          </Text>
+        ))}
       </ScrollView>
 
       {/* Back Button */}
@@ -72,28 +72,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+    marginBottom: 20, 
   },
   backButton: {
     padding: 10,
-  },
-  arrow: {
-    width: 24,
-    height: 24,
-    transform: [{ rotate: '90deg' }],
-  },
-  arrowLine1: {
-    width: 2,
-    height: 24,
-    backgroundColor: 'black',
-    position: 'absolute',
-    transform: [{ rotate: '90deg' }],
-  },
-  arrowLine2: {
-    width: 18,
-    height: 12,
-    backgroundColor: 'black',
-    position: 'absolute',
-    left: -12,
+    marginTop: 10, 
   },
   headerText: {
     fontSize: 20,

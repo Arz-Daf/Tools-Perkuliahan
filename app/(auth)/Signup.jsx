@@ -6,8 +6,11 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons"; // Pastikan Anda sudah memasang 'expo/vector-icons'
+import { Ionicons } from "@expo/vector-icons";
 import { Stack } from "expo-router";
 import { supabase } from "../../libs/supabase";
 
@@ -22,12 +25,10 @@ export default function SignUpScreen() {
   async function signUpWithEmail() {
     setLoading(true);
     if (password !== confirmPassword) {
-      return Alert.alert("Password doesnt match")
+      setLoading(false);
+      return Alert.alert("Password doesn't match");
     }
-    const {
-      data: { session },
-      error,
-    } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email: email,
       password: password,
     });
@@ -35,88 +36,95 @@ export default function SignUpScreen() {
     if (error) {
       Alert.alert(error.message);
     } else {
-      Alert.alert("success");
+      Alert.alert("Success! Please check your inbox for email verification.");
     }
-    // if (!session) Alert.alert('Please check your inbox for email verification!')
     setLoading(false);
   }
+
   return (
     <>
       <Stack.Screen
         options={{
           headerTransparent: true,
           headerBackTitleVisible: false,
-          title:"" 
+          title: ""
         }}
       />
 
-      <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>
-            <Text style={styles.toolsText}>Tools </Text>
-            <Text style={styles.perkuliahanText}>Perkuliahan</Text>
-          </Text>
-        </View>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <View style={styles.logoContainer}>
+              <Text style={styles.logoText}>
+                <Text style={styles.toolsText}>Tools </Text>
+                <Text style={styles.perkuliahanText}>Perkuliahan</Text>
+              </Text>
+            </View>
 
-        <Text style={styles.headerText}>Create your account</Text>
-        <Text style={styles.subHeaderText}>
-          Please fill in the details to sign up.
-        </Text>
+            <Text style={styles.headerText}>Create your account</Text>
+            <Text style={styles.subHeaderText}>Please fill in the details to sign up.</Text>
 
-        <TextInput
-          style={styles.input}
-          placeholder="Email address"
-          value={email}
-          onChangeText={(text)=>{setEmail(text)}}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            placeholder="Password"
-            value={password}
-            onChangeText={(text)=>{setPassword(text)}}
-            secureTextEntry={!showPassword}
-          />
-          <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Ionicons
-              name={showPassword ? "eye-off" : "eye"}
-              size={24}
-              color="gray"
+            <TextInput
+              style={styles.input}
+              placeholder="Email address"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
             />
-          </TouchableOpacity>
-        </View>
 
-        <View style={styles.passwordContainer}>
-          <TextInput
-            style={styles.passwordInput}
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChangeText={(text)=>{setConfirmPassword(text)}}
-            secureTextEntry={!showConfirmPassword}
-          />
-          <TouchableOpacity
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-          >
-            <Ionicons
-              name={showConfirmPassword ? "eye-off" : "eye"}
-              size={24}
-              color="gray"
-            />
-          </TouchableOpacity>
-        </View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPassword}
+              />
+              <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                <Ionicons
+                  name={showPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
 
-        <TouchableOpacity style={styles.signUpButton} disabled={loading} onPress={signUpWithEmail}>
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
+            <View style={styles.passwordContainer}>
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                secureTextEntry={!showConfirmPassword}
+              />
+              <TouchableOpacity onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                <Ionicons
+                  name={showConfirmPassword ? "eye-off" : "eye"}
+                  size={24}
+                  color="gray"
+                />
+              </TouchableOpacity>
+            </View>
+
+            <TouchableOpacity style={styles.signUpButton} disabled={loading} onPress={signUpWithEmail}>
+              <Text style={styles.signUpButtonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -125,14 +133,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   logoContainer: {
-    position: "absolute",
-    top: 220,
     alignItems: "center",
+    marginBottom: 0,
+    marginTop: 50,
   },
   logoText: {
     fontSize: 35,
     fontWeight: "bold",
-    marginBottom: 32,
   },
   toolsText: {
     color: "#FED542", // Warna kuning
@@ -144,7 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 8,
-    marginTop: 50,
+    marginTop: 20,
   },
   subHeaderText: {
     fontSize: 16,
